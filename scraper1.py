@@ -2,6 +2,8 @@ from requests import get
 from bs4 import BeautifulSoup
 # from urllib.request import urlopen as uReq
 from re import sub
+import pandas as pd
+import csv
 
 
 if __name__ == "__main__":
@@ -13,7 +15,18 @@ if __name__ == "__main__":
     info = []
     for container in containers:
         tds = container.find_all('td')
+        tmp_array = []
         for td in tds:
-            info.append(sub(r'\s+',' ',td.text))
+            tmp_array.append(sub(r'\s+|(Enter » Virtual participation »)', ' ', td.text))
+        info.append(tmp_array)
 
-    print(info)
+    header = ["NAMES", "AUTHORS", "START", "DURATION", " ", " "]
+
+    df = pd.DataFrame(info, columns=header)
+    df.to_csv('tmp_file.csv', sep='\t', na_rep='Unkown')  # or below
+
+    # with open("tmp_file.csv", "w") as f:
+    #     writer = csv.writer(f, delimiter=',')
+    #     writer.writerow(header)
+    #     for line in info:
+    #         writer.writerow([elem for elem in line])
