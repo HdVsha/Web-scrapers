@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from re import sub
 import pandas as pd
 import csv
+import scrapy
 
 
 if __name__ == "__main__":
@@ -30,3 +31,24 @@ if __name__ == "__main__":
     #     writer.writerow(header)
     #     for line in info:
     #         writer.writerow([elem for elem in line])
+
+    '''
+    ALARM!!! In order to run the code below you need to put this "spider" into 'spiders' dir in your Scrapy project
+    and run 'scrapy crawl cf_contests -o contests.json' in your terminal to save the info from the site
+    (and do not forget to change 'ROBOTSTXT_OBEY = True' --> 'ROBOTSTXT_OBEY = False' in settings.py
+    '''
+    class CFContests(scrapy.spiders.Spider):
+        name = "cf_contests"
+
+        start_urls = [
+            "https://codeforces.com/contests/"
+        ]
+
+        def parse(self, response):
+            for contest in response.css('div.contests-table'):
+                yield {
+                    # css parser
+                    'Name of the contest': contest.css('div.datatable table tr td::text')[0].get().strip(),
+                    # [href*=profile] --- checks whether the 'profile' is in the URL
+                    'Bosses': contest.css('div.datatable table tr td a[href*=profile]::text').getall()
+                }
