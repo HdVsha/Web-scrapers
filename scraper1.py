@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 # from urllib.request import urlopen as uReq
 from re import sub
 import pandas as pd
-import csv
+# import csv
 import scrapy
 
 
