@@ -1,0 +1,9 @@
+wheel == 0.35.1
+pytest == 6.1.1
+requests
+bs4
+re
+pandas
+csv
+scrapy
+protego
