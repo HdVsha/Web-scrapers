@@ -45,10 +45,10 @@ if __name__ == "__main__":
         ]
 
         def parse(self, response):
-            for contest in response.css('div.contests-table'):
-                yield {
-                    # css parser
-                    'Name of the contest': contest.css('div.datatable table tr td::text')[0].get().strip(),
-                    # [href*=profile] --- checks whether the 'profile' is in the URL
-                    'Bosses': contest.css('div.datatable table tr td a[href*=profile]::text').getall()
-                }
+            yield {
+                # css parser
+                'Name of the contest': response.css('div.contests-table div.datatable table tr td::text').getall(),
+                # [href*=profile] --- checks whether the 'profile' is in the URL
+                'Bosses': response.css('div.contests-table div.datatable table tr a[href*=profile]::text').getall()
+            }
+
